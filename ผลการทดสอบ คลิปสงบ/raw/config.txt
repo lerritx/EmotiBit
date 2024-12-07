@@ -1,0 +1,1 @@
+{"WifiCredentials": [{"ssid": "MedAI-148", "password" : "IMI#R148"}]}
