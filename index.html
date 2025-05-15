@@ -1,0 +1,72 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EmotiBit Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .sensor-value {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>EmotiBit Data</h1>
+    <div class="container">
+        <div id="PPG_RED" class="sensor-value">PPG Red: </div>
+        <div id="PPG_IR" class="sensor-value">PPG IR: </div>
+        <div id="PPG_GRN" class="sensor-value">PPG Green: </div>
+        <div id="EDA" class="sensor-value">EDA: </div>
+        <div id="HUMIDITY" class="sensor-value">Humidity: </div>
+        <div id="ACC_X" class="sensor-value">Accelerometer X: </div>
+        <div id="ACC_Y" class="sensor-value">Accelerometer Y: </div>
+        <div id="ACC_Z" class="sensor-value">Accelerometer Z: </div>
+        <div id="GYRO_X" class="sensor-value">Gyroscope X: </div>
+        <div id="GYRO_Y" class="sensor-value">Gyroscope Y: </div>
+        <div id="GYRO_Z" class="sensor-value">Gyroscope Z: </div>
+        <div id="MAG_X" class="sensor-value">Magnetometer X: </div>
+        <div id="MAG_Y" class="sensor-value">Magnetometer Y: </div>
+        <div id="MAG_Z" class="sensor-value">Magnetometer Z: </div>
+        <div id="TEMP" class="sensor-value">Temperature: </div>
+    </div>
+
+    <script>
+        // อัพเดทค่าทุก 100ms
+        setInterval(() => {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    // อัพเดทค่าแต่ละเซ็นเซอร์
+                    Object.keys(data).forEach(key => {
+                        const element = document.getElementById(key);
+                        if (element && data[key].length > 0) {
+                            // แสดงค่าล่าสุดของแต่ละเซ็นเซอร์
+                            const value = data[key][data[key].length - 1].value;
+                            // แสดงทศนิยม 2 ตำแหน่ง
+                            element.textContent = `${element.textContent.split(':')[0]}: ${value.toFixed(2)}`;
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }, 100);
+    </script>
+</body>
+</html>
